@@ -1,0 +1,766 @@
+********* Assignment 2 ***********
+
+create table subject(name varchar(20),author varchar(20),publisher varchar(20));
+insert into subject values('oracle','tiger','hill');
+insert into subject values('java','iger','hiller');
+insert into subject values('.net','frfiger','rfrghill');
+
+select *from subject where name like oracle;
+select *from subject where name like 'j%';
+select *from subject where name like "%.net%";
+select *from subject where author like "%er";
+select *from subject where publisher like "%hill%"; 
+
+
+
+
+
+create database Assignment2;
+use Assignment2;
+
+CREATE TABLE PUBLISHERS
+(
+    PUBID     int(3)   PRIMARY KEY,
+    PNAME     int(30),
+    EMAIL     int(50)  UNIQUE,
+    PHONE      int(30)
+);
+alter table Publishers modify phone bigint;
+alter table publishers modify pname varchar(30);
+alter table publishers modify email varchar(30);
+
+CREATE TABLE  SUBJECTS
+(
+    SUBID      VARCHAR(5) PRIMARY KEY,
+    SNAME      VARCHAR(30)
+);
+CREATE TABLE  AUTHORS
+(
+    AUID     int(5)  PRIMARY KEY,
+    ANAME      VARCHAR(30),
+    EMAIL      VARCHAR(50)  UNIQUE,
+    PHONE      VARCHAR(30)
+);
+CREATE TABLE  TITLES
+(
+    TITLEID    int(5) PRIMARY KEY,
+    TITLE      VARCHAR(30),
+    PUBID      int(3),
+    SUBID      VARCHAR(5),
+    PUBDATE    DATE,
+    COVER      CHAR(1)  CHECK ( COVER IN ('P','H','p','h')),
+    PRICE      int(4),
+ CONSTRAINT TITLES_PUBID_FK FOREIGN KEY (PUBID) REFERENCES PUBLISHERS(PUBID),
+ CONSTRAINT TITLES_SUBID_FK FOREIGN KEY (SUBID) REFERENCES SUBJECTS(SUBID)
+);
+
+CREATE TABLE  TITLEAUTHORS
+(
+    TITLEID    int(5) ,
+    AUID      int(5) ,
+    IMPORTANCE int(2),
+   PRIMARY KEY(TITLEID,AUID),
+   CONSTRAINT  TITLESAUTHORS_TITLEID_FK FOREIGN KEY (TITLEID) REFERENCES TITLES(TITLEID),
+   CONSTRAINT  TITLESAUTHORS_AUTHID_FK FOREIGN KEY (AUID) REFERENCES AUTHORS(AUID)
+);
+CREATE TABLE  SUBJECTS_BACKUP
+(
+    SUBID      VARCHAR(5) PRIMARY KEY,
+    SNAME      VARCHAR(30)
+);
+
+INSERT INTO SUBJECTS VALUES ('ORA','ORACLE DATABASE 10g');
+INSERT INTO SUBJECTS VALUES ('JAVA','JAVA LANGUAGE');
+INSERT INTO SUBJECTS VALUES ('JEE','JAVA ENTEPRISE EDITION');
+INSERT INTO SUBJECTS VALUES ('VB','VISUAL BASIC.NET');
+INSERT INTO SUBJECTS VALUES ('ASP','ASP.NET');
+
+INSERT INTO PUBLISHERS VALUES (1,'WILLEY','WDT@VSNL.NET','911123260877');
+ INSERT INTO PUBLISHERS VALUES (2,'WROX','INFO@WROX.COM',NULL);
+INSERT INTO PUBLISHERS VALUES (3,'TATA MCGRAW-HILL','FEEDBACK@TATAMCGRAWHILL.COM','911133333322');
+ INSERT INTO PUBLISHERS VALUES (4,'TECHMEDIA','BOOKS@TECHMEDIA.COM','911133257660');
+ 
+ 
+ INSERT INTO AUTHORS VALUES (101, 'HERBERT SCHILD','HERBERT@YAHOO.COM',NULL);
+INSERT INTO AUTHORS VALUES (102, 'JAMES GOODWILL','GOODWILL@HOTMAIL.COM',NULL);
+INSERT INTO AUTHORS VALUES (103, 'DAVAID HUNTER','HUNTER@HOTMAIL.COM',NULL);
+INSERT INTO AUTHORS VALUES (104, 'STEPHEN WALTHER','WALTHER@GMAIL.COM',NULL);
+INSERT INTO AUTHORS VALUES (105, 'KEVIN LONEY','LONEY@ORACLE.COM',NULL);
+INSERT INTO AUTHORS VALUES (106, 'ED. ROMANS','ROMANS@THESERVERSIDE.COM',NULL);
+
+INSERT INTO TITLES VALUES (1001,'ASP.NET UNLEASHED',4,'ASP','2002-02-12','P',540);
+INSERT INTO TITLES VALUES (1002,'ORACLE10G COMP. REF.',3,'ORA','2005-05-01','P',575);
+INSERT INTO TITLES VALUES (1003,'MASTERING EJB',1,'JEE','2005-02-03','P',475);
+INSERT INTO TITLES VALUES (1004,'JAVA COMP. REF',3,'JAVA','2005-04-03','P',499);
+INSERT INTO TITLES VALUES (1005,'PRO. VB.NET',2,'VB','2005-06-15','P',450);
+
+ INSERT INTO TITLEAUTHORS VALUES (1001,104,1);
+ INSERT INTO TITLEAUTHORS VALUES (1002,105,1);
+INSERT INTO TITLEAUTHORS VALUES (1003,106,1);
+INSERT INTO TITLEAUTHORS VALUES (1004,101,1);
+INSERT INTO TITLEAUTHORS VALUES (1005,103,1);
+INSERT INTO TITLEAUTHORS VALUES (1005,102,2);
+
+select pname,phone email from Publishers;
+select aname,phone from Authors;
+select titleid, title, pubdate from Titles;
+select auid, titleid, importance from titleauthors;
+
+
+select sname from subjects where sname like 'oracle%';
+select subid from subjects where subid like 'j%';
+select subid from subjects where subid like '%.net%';
+select aname from authors where aname like '%er';
+select aname from authors where aname like '%er';
+select pname from publishers where pname like '%hill ';
+
+select price from titles where price<500;
+select pubdate from titles where pubdate<'2005-05-01';
+select sname from subjects subject where subid= 'java' or 'jee';
+select auid from authors where auid>103;
+select *from titles where titleid =101 or price>400;
+
+
+-- date
+select *from titles where pubdate "2005-04-01" in between "2005-04-30";
+
+
+
+
+
+
+
+1. select pname, phone, email from publishers;
+
+
++------------------+----------------+-----------------------------+
+| pname            | phone          | email                       |
++------------------+----------------+-----------------------------+
+| WILLEY           | 91-11-23260877 | WDT@VSNL.NET                |
+| WROX             | NULL           | INFO@WROX.COM               |
+| TATA MCGRAW-HILL | 91-11-33333322 | FEEDBACK@TATAMCGRAWHILL.COM |
+| TECHMEDIA        | 91-11-33257660 | BOOKS@TECHMEDIA.COM         |
++------------------+----------------+-----------------------------+
+4 rows in set (0.01 sec)
+
+
+
+
+2. 	List aname, phone from Authors.
+
+
+mysql> select aname, phone from authors
+    -> ;
++-----------------+-------+
+| aname           | phone |
++-----------------+-------+
+| HERBERT SCHILD  | NULL  |
+| JAMES GOODWILL  | NULL  |
+| DAVAID HUNTER   | NULL  |
+| STEPHEN WALTHER | NULL  |
+| KEVIN LONEY     | NULL  |
+| ED. ROMANS      | NULL  |
++-----------------+-------+
+6 rows in set (0.00 sec)
+
+
+
+3.	List titleid, title, pubdate from Titles.
+
+
+mysql> select titleid, title, pubdate from titles
+    -> ;
++---------+----------------------+------------+
+| titleid | title                | pubdate    |
++---------+----------------------+------------+
+|    1001 | ASP.NET UNLEASHED    | 2002-02-12 |
+|    1002 | ORACLE10G COMP. REF. | 2005-05-01 |
+|    1003 | MASTERING EJB        | 2005-02-03 |
+|    1004 | JAVA COMP. REF       | 2005-04-03 |
+|    1005 | PRO. VB.NET          | 2005-06-15 |
++---------+----------------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+
+4.	List auid, titleid, importance from titleauthors.
+
+
+mysql> select auid, titleid, importance from titleauthors
+    -> ;
++------+---------+------------+
+| auid | titleid | importance |
++------+---------+------------+
+|  104 |    1001 |          1 |
+|  105 |    1002 |          1 |
+|  106 |    1003 |          1 |
+|  101 |    1004 |          1 |
+|  102 |    1005 |          2 |
+|  103 |    1005 |          1 |
++------+---------+------------+
+6 rows in set (0.00 sec)
+
+------------------------------(like)------------------------------
+
+
+1.	select subject name "oracle" from subjects table.
+
+
+
+mysql> select sname from subjects where sname like '%oracle%';
++---------------------+
+| sname               |
++---------------------+
+| ORACLE DATABASE 10g |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+
+2.	select subject name starts with 'j'.
+
+
+mysql> select sname from subjects where sname like 'j%';
++------------------------+
+| sname                  |
++------------------------+
+| JAVA LANGUAGE          |
+| JAVA ENTEPRISE EDITION |
++------------------------+
+2 rows in set (0.00 sec)
+
+
+
+
+3.	select subject name which contains ".net" .
+
+
+
+
+
+mysql> select sname from subject where sname like
+    -> '%.net'
+    -> ;
+ERROR 1146 (42S02): Table 'assignment_2.subject' doesn't exist
+mysql> '%.net%'
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''%.net%'' at line 1
+mysql> select sname from subjects where sname like '%.net%'
+    -> ;
++------------------+
+| sname            |
++------------------+
+| ASP.NET          |
+| VISUAL BASIC.NET |
++------------------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+4.	select author name ends whith 'er'.
+
+
+mysql> select sname from subjects where sname like '%er';
+Empty set (0.00 sec)
+
+
+
+
+5.	select publishers name which contains "hill".
+
+
+
+mysql> select pname from publishers where pname like '%hill%'
+    -> ;
++------------------+
+| pname            |
++------------------+
+| TATA MCGRAW-HILL |
++------------------+
+1 row in set (0.00 sec)
+
+
+
+
+------------------------------ relational operator ------------------------------
+
+
+
+1.	select title from title table having price less than 500.
+
+
+
+
+mysql> select title from titles where price < 500
+    -> ;
++----------------+
+| title          |
++----------------+
+| MASTERING EJB  |
+| JAVA COMP. REF |
+| PRO. VB.NET    |
++----------------+
+3 rows in set (0.00 sec)
+
+
+
+
+2.	select title from title table published before '3 april'.
+
+
+mysql> select title from titles where pubdate > '2005-04-03';
++----------------------+
+| title                |
++----------------------+
+| ORACLE10G COMP. REF. |
+| PRO. VB.NET          |
++----------------------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+3.	select subject name from subject having id as 'java' or 'jee'.
+
+
+
+mysql> select subid from subjects where subid = 'JAVA' or subid = 'JEE';
++-------+
+| subid |
++-------+
+| JAVA  |
+| JEE   |
++-------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+4.	select author name from author table id greater than '103'.
+
+
+
+mysql> select aname from authors where auid >103
+    -> ;
++-----------------+
+| aname           |
++-----------------+
+| STEPHEN WALTHER |
+| KEVIN LONEY     |
+| ED. ROMANS      |
++-----------------+
+3 rows in set (0.00 sec)
+
+
+
+5.	select all from title having titleid as 101 or price > 400.
+
+
+mysql> select * from titles where titleid = 101 or price > 400
+    -> ;
++---------+----------------------+-------+-------+------------+-------+-------+
+| TITLEID | TITLE                | PUBID | SUBID | PUBDATE    | COVER | PRICE |
++---------+----------------------+-------+-------+------------+-------+-------+
+|    1001 | ASP.NET UNLEASHED    |     4 | ASP   | 2002-02-12 | P     |   540 |
+|    1002 | ORACLE10G COMP. REF. |     3 | ORA   | 2005-05-01 | P     |   575 |
+|    1003 | MASTERING EJB        |     1 | JEE   | 2005-02-03 | P     |   475 |
+|    1004 | JAVA COMP. REF       |     3 | JAVA  | 2005-04-03 | P     |   499 |
+|    1005 | PRO. VB.NET          |     2 | VB    | 2005-06-15 | P     |   450 |
++---------+----------------------+-------+-------+------------+-------+-------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+------------------------------ IN operator ------------------------------ 
+
+
+
+6. select all from publishers table  where publisher name is ('TECHMEDIA', 'WROX');
+
+
+mysql> SELECT * FROM PUBLISHERs WHERE PNAME IN ('TECHMEDIA', 'WROX');
++-------+-----------+---------------------+----------------+
+| PUBID | PNAME     | EMAIL               | PHONE          |
++-------+-----------+---------------------+----------------+
+|     2 | WROX      | INFO@WROX.COM       | NULL           |
+|     4 | TECHMEDIA | BOOKS@TECHMEDIA.COM | 91-11-33257660 |
++-------+-----------+---------------------+----------------+
+2 rows in set (0.00 sec)
+
+
+ ------------------------------ aggregate function ------------------------------ 
+
+
+1.	select maximum price from titles table.
+
+
+mysql> select max(price) from titles;
++------------+
+| max(price) |
++------------+
+|        575 |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+2.	select average importance from titleauthors. 
+
+
+
+mysql> select avg(importance) from titleauthors;
++-----------------+
+| avg(importance) |
++-----------------+
+|          1.1667 |
++-----------------+
+1 row in set (0.00 sec)
+
+
+
+3.	select number of records from author table.
+
+
+mysql> select count(auid) from authors;
++-------------+
+| count(auid) |
++-------------+
+|           6 |
++-------------+
+1 row in set (0.05 sec)
+
+
+
+
+4.	select sum of prices of all books.
+
+
+
+mysql> select sum(price) from titles;
++------------+
+| sum(price) |
++------------+
+|       2539 |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+ ------------------------------ (date) ------------------------------ 
+
+
+
+1.	select title from title table where month is 'Apr'.
+
+
+mysql> select count(*) from titles where month(pubdate) = '04';
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.10 sec)
+
+
+
+
+2.	select year from system date.
+
+
+mysql> select year ('2020-12-05');
++---------------------+
+| year ('2020-12-05') |
++---------------------+
+|                2020 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+
+3.	select month from system date.
+
+
+
+mysql> select month('2020-12-05');
++---------------------+
+| month('2020-12-05') |
++---------------------+
+|                  12 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+4.	select last day of month when 'java' book published.
+
+
+
+mysql> select last_day(now());
++-----------------+
+| last_day(now()) |
++-----------------+
+| 2020-12-31      |
++-----------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+ ------------------------------ DML ------------------------------ 
+
+
+
+create table Employee with emp_id (number),emp_name(char(50)) and insert some value.
+1.	Add one column name 'dept_id ' in table name 'Employee';
+
+
+
+mysql> create table employee(emp_id int, emp_name char(50));
+mysql> insert into employee values(1,'SARANG'),(2,'PRATIK'),(3,'ROHIT');
+
+
+
+mysql> alter table employee add dept_id int(4);
+
+mysql> select * from employee;
++--------+----------+---------+
+| emp_id | emp_name | dept_id |
++--------+----------+---------+
+|      1 | SARANG   |    NULL |
+|      2 | PRATIK   |    NULL |
+|      3 | ROHIT    |    NULL |
++--------+----------+---------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> desc employee;
++----------+----------+------+-----+---------+-------+
+| Field    | Type     | Null | Key | Default | Extra |
++----------+----------+------+-----+---------+-------+
+| emp_id   | int(11)  | YES  |     | NULL    |       |
+| emp_name | char(50) | YES  |     | NULL    |       |
+| dept_id  | int(4)   | YES  |     | NULL    |       |
++----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+
+
+2.	Change the datatype of column 'char' from tablename 'Employee' to 'varchar2'.
+
+
+mysql> alter table employee modify column emp_name varchar(50);
+Query OK, 3 rows affected (0.91 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| emp_id   | int(11)     | YES  |     | NULL    |       |
+| emp_name | varchar(50) | YES  |     | NULL    |       |
+| dept_id  | int(4)      | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+
+
+3. update name of employee to 'Scott'.
+
+
+mysql> update employee set emp_name = 'SCOTT';
+
+
+mysql> select * from employee;
++--------+----------+---------+
+| emp_id | emp_name | dept_id |
++--------+----------+---------+
+|      1 | SCOTT    |    NULL |
+|      2 | SCOTT    |    NULL |
+|      3 | SCOTT    |    NULL |
++--------+----------+---------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+
+5.	truncate the table.
+
+
+mysql> truncate table employee;
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> select * from employee;
+Empty set (0.00 sec)
+
+
+
+-----------------------------------------------------------------------------
+
+
+
+
+Perform :
+
+
+1.	round
+
+
+
+mysql> select round(12.44);
++--------------+
+| round(12.44) |
++--------------+
+|           12 |
++--------------+
+1 row in set (0.01 sec)
+
+
+
+2. ceil
+
+mysql> select ceil(12.44);
++-------------+
+| ceil(12.44) |
++-------------+
+|          13 |
++-------------+
+1 row in set (0.00 sec)
+
+
+3. floor
+
+mysql> select floor(44.3);
++-------------+
+| floor(44.3) |
++-------------+
+|          44 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+7. sign(-15)
+
+
+mysql> select sign(-15);
++-----------+
+| sign(-15) |
++-----------+
+|        -1 |
++-----------+
+1 row in set (0.00 sec)
+
+
+
+
+8. mod
+
+mysql> select mod(23,2);
++-----------+
+| mod(23,2) |
++-----------+
+|         1 |
++-----------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select sqrt(81);
++----------+
+| sqrt(81) |
++----------+
+|        9 |
++----------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> select power(5,2);
++------------+
+| power(5,2) |
++------------+
+|         25 |
++------------+
+1 row in set (0.10 sec)
+
+
+******************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
